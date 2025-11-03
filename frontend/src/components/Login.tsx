@@ -37,12 +37,12 @@ function Login() {
     console.log('Oauth of facebook!!!');
   }
 
-  function signup() {
+  function handleSignup() {
     navigate('/signup');
   }
 
   return (
-    <div className="h-full grid place-items-center bg-gradient-to-t from-[#1C3F5C] to-[#081520]">
+    <div className="h-full grid place-items-center bg-gradient-to-t from-[#1C3F5C] to-[#081520] p-[20px]">
       <div className="h-full flex items-center w-full max-w-[1200px]">
         <figure className="flex-1 grid relative">
           <img src={signQuestLogo} alt='logo' className="size-110 place-self-center"/>
@@ -63,7 +63,7 @@ function Login() {
             <TextInput label="username" type="text" value={username} onValue={handleUsername} symbol={accountIcon} />
             <TextInput label="password" type="password" value={password} onValue={handlePassword} symbol={lockIcon} />
             <a className="text-end">Forgot password?</a>
-            <button type='submit' className="
+            <button type='submit' onClick={handleSubmit} className="
                 bg-[#204666] rounded-xl w-2/5 self-center text-white font-bold text-lg pt-[5px] pb-[5px] m-[30px]
               "
             >
@@ -81,7 +81,7 @@ function Login() {
                 <img src={facebook} alt='twitter'/>
               </button>
             </div>
-            <button type='button' onClick={signup} className="
+            <button type='button' onClick={handleSignup} className="
                 bg-[#F6D052] rounded-xl w-2/5 self-center font-bold text-lg pt-[5px] pb-[5px] m-[75px]
               "
             >

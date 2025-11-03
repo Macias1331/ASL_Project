@@ -25,9 +25,9 @@ function TextInput(
 ) {
 
   return (
-    <div className="mt-[40px]">
+    <div className="mt-[40px] flex-1">
       <label htmlFor={label} className="text-xl">{label.charAt(0).toUpperCase() + label.slice(1)}</label>
-      <div className={`bg-[#F6D052] flex rounded-sm mt-[5px]`}>
+      <div className={`bg-[#F6D052] flex rounded-sm mt-[5px] h-[40px]`}>
         {(symbol !== undefined) ?
           <img src={symbol} alt={label} className="size-9"/> : null
         }
