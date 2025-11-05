@@ -3,6 +3,12 @@ import Login from "./Login";
 import MenuScreen from "./MenuScreen";
 import Signup from "./Signup";
 import Auth from "./Auth";
+import Store from "./Store";
+import Friends from "./Friends";
+import Settings from "./Settings";
+import Game from "./Game";
+import Error from "./Error";
+import DressingRoom from "./DressingRoom";
 
 const routes = [
   {
@@ -26,7 +32,33 @@ const routes = [
         path: '/menu',
         element: <MenuScreen />
       },
+      {
+        path: '/store',
+        element: <Store />
+      },
+      {
+        path: '/friends',
+        element: <Friends />
+      },
+      {
+        path: '/settings',
+        element: <Settings />
+      },
+      {
+        path: '/game',
+        element: <Game />
+      },
+      {
+        path: '/dressing-room',
+        element: <DressingRoom />
+      }
     ]
+  },
+
+  //404 Route
+  {
+    path: '*',
+    element: <Error />
   }
 ];
 

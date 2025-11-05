@@ -1,7 +1,15 @@
+import Header from "./mini/Header";
 
 
 function MenuScreen() {
-  return <h1>In Menu!!!</h1>
+  return (
+    <>
+      <Header />
+      <div>
+          
+      </div>  
+    </>
+  )
 }
 
 export default MenuScreen;
