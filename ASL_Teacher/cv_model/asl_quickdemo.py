@@ -2,12 +2,19 @@
 import cv2, mediapipe as mp, numpy as np, time, json, os
 from collections import defaultdict
 from sklearn.neighbors import KNeighborsClassifier
+import platform
+if platform.system() == "Windows":
+    backend = cv2.CAP_DSHOW
+elif platform.system() == "Darwin":
+    backend = cv2.CAP_AVFOUNDATION
+else:
+    backend = 0   # default for Linux/WSL
+cap = cv2.VideoCapture(0, backend) if backend != 0 else cv2.VideoCapture(0)
 
 LETTERS = ["A","B","L","V","Y"]  # small, distinct poses
 SAVE_FILE = "asl5_samples.json"
 
 mp_hands = mp.solutions.hands
-cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
 
 def extract_features(landmarks):
     # landmarks: 21 points with x,y,[z] normalized to image size by mediapipe (0..1)

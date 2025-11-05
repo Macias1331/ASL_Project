@@ -9,6 +9,7 @@ import Settings from "./Settings";
 import Game from "./Game";
 import Error from "./Error";
 import DressingRoom from "./DressingRoom";
+import { HandsRecorder } from "./HandsRecorder/HandsRecorder";
 
 const routes = [
   {
@@ -51,6 +52,10 @@ const routes = [
       {
         path: '/dressing-room',
         element: <DressingRoom />
+      },
+      {
+        path: '/hands',
+        element: <HandsRecorder />
       }
     ]
   },

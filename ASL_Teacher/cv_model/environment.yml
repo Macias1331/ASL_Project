@@ -1,0 +1,13 @@
+name: asl_demo
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - scikit-learn
+  - opencv
+  - pip:
+    - mediapipe
+    - joblib
+    - typing-extensions
