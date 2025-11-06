@@ -25,22 +25,24 @@ function Login() {
     navigate('/menu');
   } 
 
-  function handleTwitter() {
-    console.log('Oauth of twitter!!!');
-  }
+  // !!! Need backend !!!
+  // function handleTwitter() {
+  //   console.log('Oauth of twitter!!!');
+  // }
 
-  function handleGoogle() {
-    console.log('Oauth of google!!!');
-  }
+  // function handleGoogle() {
+  //   console.log('Oauth of google!!!');
+  // }
 
-  function handleFacebook() {
-    console.log('Oauth of facebook!!!');
-  }
+  // function handleFacebook() {
+  //   console.log('Oauth of facebook!!!');
+  // }
 
   function handleSignup() {
     navigate('/signup');
   }
 
+  // !!! global store for colors !!!
   return (
     <div className="h-full grid place-items-center bg-gradient-to-t from-[#1C3F5C] to-[#081520] p-[20px]">
       <div className="h-full flex items-center w-full max-w-[1200px]">

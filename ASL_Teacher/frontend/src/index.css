@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@layer base {
+  :root {
+    --header-size: 75px;
+    --screen-vertical-padding: 20px;
+  }
+}
+
 * {
   box-sizing: border-box;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -10,5 +17,5 @@ body, html {
 }
 
 #root {
-  height: 100vh;
+  height: 100%;
 }
