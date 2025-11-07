@@ -2,6 +2,7 @@ import Header from "./mini/Header";
 import fire from "../assets/fire.png";
 import star from "../assets/star.png";
 import Body from "./mini/Body";
+import character from "../assets/character.png";
 
 function MenuScreen() {
   return (
@@ -55,8 +56,8 @@ function MenuScreen() {
           </div>
 
           {/*character*/}
-          <div className="flex-1">
-
+          <div className="flex-1 flex justify-end">
+            <img src={character} alt='your character' />
           </div>
 
           <div className="flex justify-end gap-[30px]">
