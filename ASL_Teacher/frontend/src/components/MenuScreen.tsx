@@ -1,12 +1,13 @@
 import Header from "./mini/Header";
 import fire from "../assets/fire.png";
 import star from "../assets/star.png";
+import Body from "./mini/Body";
 
 function MenuScreen() {
   return (
     <>
       <Header />
-      <div className="flex gap-[20px] h-[calc(100vh-var(--header-size))] p-[30px] pt-[50px] bg-gradient-to-t from-[#1C3F5C] to-[#081520]">
+      <Body tailwind="flex gap-[20px]">
         <div className="flex-1 flex flex-col gap-[30px]">
           <button className="bg-gradient-to-r from-[#FFF0F0] to-[#2B2727] flex-1 flex items-end p-[20px] text-3xl">
             Mini Games
@@ -89,7 +90,7 @@ function MenuScreen() {
             </a>
           </div>
         </div>
-      </div>  
+      </Body>  
     </>
   );
 }
