@@ -7,6 +7,7 @@ interface Props {
   color?: string;
   width?: string;
   height?: string;
+  onClick?: any; //update later
 }
 
 function Button({
@@ -14,12 +15,14 @@ function Button({
   imageOne, imageTwo, 
   altOne, altTwo, 
   color='#F6D052', 
-  width="50px", height="50px"
+  width="50px", height="50px",
+  onClick
 } : Props) {
   const className = `bg-[${color}] flex items-center justify-center rounded-2xl w-[${width}] h-[${height}]`;
   const spanClassName = `w-[${width}] text-3xl`;
+
   return (
-    <button className={className}>
+    <button className={className} onClick={onClick}>
       {(text && <span className={spanClassName}>{text}</span>)}
       {(imageOne && (
         <img src={imageOne} alt={altOne} className="h-full w-full"/>

@@ -10,6 +10,7 @@ import Game from "./Game";
 import Error from "./Error";
 import DressingRoom from "./DressingRoom";
 import { HandsRecorder } from "./HandsRecorder/HandsRecorder";
+import Achievements from "./Achievements";
 
 const routes = [
   {
@@ -46,12 +47,16 @@ const routes = [
         element: <Settings />
       },
       {
-        path: '/game',
+        path: '/learning-mode',
         element: <Game />
       },
       {
         path: '/dressing-room',
         element: <DressingRoom />
+      },
+      {
+        path: '/achievements',
+        element: <Achievements />
       },
       {
         path: '/hands',

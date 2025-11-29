@@ -2,8 +2,11 @@ import Body from "./mini/Body";
 import Header from "./mini/Header";
 import Button from "./mini/Button";
 import arrowLeft from "../assets/arrow-left.svg";
+import { useNavigate } from "react-router-dom";
 
 function Store() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Header />
@@ -29,7 +32,11 @@ function Store() {
         </div>
 
         <div className="flex justify-between">
-          <Button imageOne={arrowLeft} altOne="back"/>
+          <Button 
+            imageOne={arrowLeft} 
+            altOne="back"
+            onClick={() => navigate('/menu')}
+          />
           <div className="flex gap-[20px]">
             <Button text="1"/>
             <Button text="2"/>
