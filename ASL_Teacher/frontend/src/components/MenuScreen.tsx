@@ -18,6 +18,7 @@ function MenuScreen() {
                               transition duration-500 ease-in-out
                               hover:translate-x-[100px]`
                             }
+            onClick={() => navigate('/mini-games')}
           >
             Mini Games
           </button>

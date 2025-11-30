@@ -63,7 +63,7 @@ const routes = [
         path: '/hands',
         element: <HandsRecorder />
       },
-       {
+      {
         path: '/mini-games',
         element: <MiniGames />
       },
