@@ -11,6 +11,7 @@ import Error from "./Error";
 import DressingRoom from "./DressingRoom";
 import { HandsRecorder } from "./HandsRecorder/HandsRecorder";
 import Achievements from "./Achievements";
+import MiniGames from "./MiniGames";
 
 const routes = [
   {
@@ -61,7 +62,12 @@ const routes = [
       {
         path: '/hands',
         element: <HandsRecorder />
-      }
+      },
+       {
+        path: '/mini-games',
+        element: <MiniGames />
+      },
+
     ]
   },
 
