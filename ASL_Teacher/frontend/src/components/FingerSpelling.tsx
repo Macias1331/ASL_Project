@@ -2,22 +2,28 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import { Hands, Results } from '@mediapipe/hands';
 import { Camera } from '@mediapipe/camera_utils';
-import styles from './FingerSpelling.module.css';
 
 // ASL Alphabet - currently trained on A, B, C
 const ALPHABET = ['A', 'B', 'C'];
-const IMAGE_SIZE = 128; // Model expects 128x128 images
 const PREDICTION_INTERVAL = 500; // Make prediction every 500ms
+const NUM_LANDMARKS = 21; // MediaPipe hand landmarks
+const NUM_COORDS = 3; // x, y, z per landmark
 
 interface Prediction {
   letter: string;
   confidence: number;
 }
 
+interface NormalizationParams {
+  mean: number[];
+  std: number[];
+}
+
 export function FingerSpelling() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [model, setModel] = useState<tf.LayersModel | null>(null);
+  const [normParams, setNormParams] = useState<NormalizationParams | null>(null);
   const [prediction, setPrediction] = useState<Prediction | null>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
@@ -27,15 +33,23 @@ export function FingerSpelling() {
   const handsRef = useRef<Hands | null>(null);
   const lastHandLandmarksRef = useRef<any>(null);
 
-  // Load pre-trained CNN model
+  // Load pre-trained landmark model
   useEffect(() => {
     const loadModel = async () => {
       try {
-        console.log('Loading model from /models/asl_alphabet/model.json...');
-        const loadedModel = await tf.loadLayersModel('/models/asl_alphabet/model.json');
+        console.log('Loading landmark model from /models/asl_landmarks/model.json...');
+        const loadedModel = await tf.loadLayersModel('/models/asl_landmarks/model.json');
+        
+        // Load normalization parameters
+        const normResponse = await fetch('/models/asl_landmarks/normalization.json');
+        const normData = await normResponse.json();
+        
         setModel(loadedModel);
+        setNormParams(normData);
         setIsModelLoaded(true);
-        console.log('✅ ASL CNN model loaded successfully');
+        console.log('✅ ASL landmark model loaded successfully');
+        console.log('   Input shape:', loadedModel.inputs[0].shape);
+        console.log('   Output shape:', loadedModel.outputs[0].shape);
       } catch (error) {
         console.error('❌ Error loading model:', error);
         alert(`Failed to load model. Check console for details.\nError: ${error}`);
@@ -119,11 +133,10 @@ export function FingerSpelling() {
     };
   }, []);
 
-  // Preprocess video frame for model using MediaPipe hand detection
-  const preprocessImage = (): tf.Tensor | null => {
-    if (!videoRef.current || !canvasRef.current || !lastHandLandmarksRef.current) return null;
+  // Extract and normalize landmark features from MediaPipe results
+  const extractLandmarkFeatures = (): tf.Tensor | null => {
+    if (!lastHandLandmarksRef.current || !normParams) return null;
 
-    const video = videoRef.current;
     const results = lastHandLandmarksRef.current;
     
     if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
@@ -132,57 +145,33 @@ export function FingerSpelling() {
 
     const landmarks = results.multiHandLandmarks[0];
     
-    // Find bounding box of hand landmarks
-    let minX = 1, minY = 1, maxX = 0, maxY = 0;
+    // Extract all 63 features (21 landmarks × 3 coordinates)
+    const features: number[] = [];
     for (const landmark of landmarks) {
-      minX = Math.min(minX, landmark.x);
-      minY = Math.min(minY, landmark.y);
-      maxX = Math.max(maxX, landmark.x);
-      maxY = Math.max(maxY, landmark.y);
+      features.push(landmark.x, landmark.y, landmark.z);
     }
 
-    // Add padding (20% on each side)
-    const width = maxX - minX;
-    const height = maxY - minY;
-    const padding = 0.2;
-    minX = Math.max(0, minX - width * padding);
-    minY = Math.max(0, minY - height * padding);
-    maxX = Math.min(1, maxX + width * padding);
-    maxY = Math.min(1, maxY + height * padding);
+    // Normalize features using training parameters
+    const normalizedFeatures = features.map((value, index) => {
+      return (value - normParams.mean[index]) / (normParams.std[index] + 1e-8);
+    });
 
-    // Convert normalized coordinates to pixel coordinates
-    const videoWidth = video.videoWidth;
-    const videoHeight = video.videoHeight;
-    const x = minX * videoWidth;
-    const y = minY * videoHeight;
-    const w = (maxX - minX) * videoWidth;
-    const h = (maxY - minY) * videoHeight;
-
-    // Create temporary canvas to crop hand region
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = IMAGE_SIZE;
-    tempCanvas.height = IMAGE_SIZE;
-    const ctx = tempCanvas.getContext('2d');
-    if (!ctx) return null;
-
-    // Draw cropped and resized hand region
-    ctx.drawImage(video, x, y, w, h, 0, 0, IMAGE_SIZE, IMAGE_SIZE);
-
-    let tensor = tf.browser.fromPixels(tempCanvas)
-      .toFloat()
-      .div(255.0)
-      .expandDims(0);
+    // Create tensor with shape [1, 63] for batch size 1
+    const tensor = tf.tensor2d([normalizedFeatures], [1, 63]);
     
     return tensor;
   };
 
-  // Make prediction from current video frame
+  // Make prediction from MediaPipe landmarks
   const makePrediction = async () => {
-    if (!model || !videoRef.current || videoRef.current.readyState !== 4) return;
+    if (!model || !normParams) return;
 
     try {
-      const inputTensor = preprocessImage();
-      if (!inputTensor) return;
+      const inputTensor = extractLandmarkFeatures();
+      if (!inputTensor) {
+        setPrediction(null);
+        return;
+      }
 
       const output = model.predict(inputTensor) as tf.Tensor;
       const predictions = await output.data();
@@ -197,7 +186,7 @@ export function FingerSpelling() {
       const maxIndex = Array.from(predictions).indexOf(Math.max(...predictions));
       const maxConfidence = predictions[maxIndex];
       
-      if (maxConfidence > 0.7) {
+      if (maxConfidence > 0.6) {  // Lower threshold for landmark model
         const currentPrediction: Prediction = {
           letter: ALPHABET[maxIndex],
           confidence: maxConfidence
@@ -314,51 +303,79 @@ export function FingerSpelling() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h2>ASL Fingerspelling Recognition</h2>
-        <div className={styles.status}>
-          <span className={isModelLoaded ? styles.statusGood : styles.statusWarning}>
-            {isModelLoaded ? '✓ CNN Model Loaded (99.4%)' : '⚠ Loading...'}
-          </span>
-          <span className={cameraActive ? styles.statusGood : styles.statusBad}>
-            {cameraActive ? '✓ Camera Active' : '✗ Camera Inactive'}
-          </span>
+    <div className="min-h-screen bg-gradient-to-b from-[#121F32] to-[#1a2942]">
+      {/* Header */}
+      <div className="bg-[#121F32] py-6 px-8 shadow-lg">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <h2 className="text-3xl font-bold text-white">ASL Fingerspelling Recognition</h2>
+          <div className="flex gap-4">
+            <span className={`px-4 py-2 rounded-full text-sm font-semibold ${isModelLoaded ? 'bg-green-500 text-white' : 'bg-yellow-500 text-gray-900'}`}>
+              {isModelLoaded ? '✓ Model Loaded' : '⚠ Loading...'}
+            </span>
+            <span className={`px-4 py-2 rounded-full text-sm font-semibold ${cameraActive ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+              {cameraActive ? '✓ Camera Active' : '✗ Camera Inactive'}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className={styles.videoContainer}>
-        <video ref={videoRef} className={styles.video} style={{ display: 'none' }} />
-        <canvas ref={canvasRef} className={styles.canvas} width={640} height={480} />
-        
-        {prediction && (
-          <div className={styles.predictionOverlay}>
-            <div className={styles.letter}>{prediction.letter}</div>
-            <div className={styles.confidence}>
-              {(prediction.confidence * 100).toFixed(1)}%
+      <div className="max-w-7xl mx-auto px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Video Feed - Takes up 2 columns */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+              <div className="relative">
+                <video ref={videoRef} style={{ display: 'none' }} />
+                <canvas ref={canvasRef} className="w-full h-auto" width={640} height={480} />
+                
+                {prediction && (
+                  <div className="absolute top-4 right-4 bg-[#FFEFB8] rounded-2xl px-6 py-4 shadow-lg">
+                    <div className="text-5xl font-bold text-gray-800 text-center">{prediction.letter}</div>
+                    <div className="text-sm text-gray-600 text-center mt-1">
+                      {(prediction.confidence * 100).toFixed(1)}% confident
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        )}
-      </div>
 
-      <div className={styles.wordDisplay}>
-        <h3>Spelled Word:</h3>
-        <div className={styles.wordText}>{spelledWord || '(start signing...)'}</div>
-        <div className={styles.controls}>
-          <button onClick={addSpace} disabled={!spelledWord}>Space</button>
-          <button onClick={deleteLastLetter} disabled={!spelledWord}>Delete</button>
-          <button onClick={clearWord} disabled={!spelledWord}>Clear</button>
+          {/* Side Panel - Instructions */}
+          <div className="space-y-6">
+            {/* Instructions Card */}
+            <div className="bg-white rounded-xl shadow-xl p-6">
+              <div className="inline-block bg-[#FFEFB8] rounded-xl px-4 py-2 mb-4">
+                <h3 className="text-lg font-bold text-gray-800">How to Play</h3>
+              </div>
+              <ul className="space-y-3 text-gray-700">
+                <li className="flex items-start">
+                  <span className="text-[#F6D052] mr-2 text-xl">•</span>
+                  <span>Position your hand clearly in front of the camera</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#F6D052] mr-2 text-xl">•</span>
+                  <span>Hold each letter steady for 1-2 seconds</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#F6D052] mr-2 text-xl">•</span>
+                  <span>Currently supports: <strong className="text-[#121F32]">A, B, C</strong></span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className={styles.instructions}>
-        <h4>Instructions:</h4>
-        <ul>
-          <li>Position your hand clearly in front of the camera</li>
-          <li>Hold each letter steady for 1-2 seconds</li>
-          <li>Currently supports: <strong>A, B, C</strong></li>
-          <li>Model: CNN trained on 9,529 images (99.41% accuracy)</li>
-        </ul>
+        {/* Feedback Display */}
+        <div className="mt-8 bg-white rounded-xl shadow-xl p-8">
+          <div className="inline-block bg-[#FFEFB8] rounded-xl px-4 py-2 mb-4">
+            <h3 className="text-xl font-bold text-gray-800">Real-time Feedback</h3>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-6 min-h-[120px]">
+            <p className="text-gray-500 text-center italic">
+              Coming soon: Get instant feedback on your hand positioning and form to improve your ASL signing accuracy.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
