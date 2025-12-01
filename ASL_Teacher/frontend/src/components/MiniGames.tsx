@@ -2,10 +2,12 @@ import Header from './mini/Header';
 import Body from './mini/Body';
 import arrowLeft from "../assets/arrow-left.svg";
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CARD_COUNT = 8;
 
 function MiniGames() {
+	const navigate = useNavigate();
 	const [selected, setSelected] = useState<number>(2);
 	const cards = new Array(CARD_COUNT).fill(null).map((_, i) => ({ id: i + 1 }));
 
@@ -28,7 +30,11 @@ function MiniGames() {
 						))}
 					</div>
 
-					<button aria-label="back" className="fixed left-[20px] bottom-[20px] z-50 bg-[#F6D052] rounded-3xl p-[10px] w-[56px] h-[56px] flex items-center justify-center shadow-md">
+					<button 
+						aria-label="back" 
+						className="fixed left-[20px] bottom-[20px] z-50 bg-[#F6D052] rounded-3xl p-[10px] w-[56px] h-[56px] flex items-center justify-center shadow-md" 
+						onClick={() => navigate('/menu')}
+					>
 						<img src={arrowLeft} alt="back" />
 					</button>
 				</div>

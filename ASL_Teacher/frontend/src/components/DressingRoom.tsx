@@ -3,8 +3,11 @@ import Header from "./mini/Header";
 import character from "../assets/character.png";
 import Button from "./mini/Button";
 import arrowLeft from "../assets/arrow-left.svg";
+import { useNavigate } from "react-router-dom";
 
 function DressingRoom() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Header />
@@ -12,7 +15,7 @@ function DressingRoom() {
         <div className="flex-1 flex flex-col">
           <img src={character} alt='your character' className="size-125 self-center mt-auto" />
           <h2 className="bg-white text-3xl pl-[20px] pr-[20px] self-center rounded-lg">Cookie Crumbler</h2>
-          <div className="mt-auto"><Button imageOne={arrowLeft} altOne='back' /></div>
+          <div className="mt-auto"><Button imageOne={arrowLeft} altOne='back' onClick={() => navigate('/menu')} /></div>
         </div>
 
         <div className="flex-1 bg-white rounded-lg flex flex-col min-w-[700px] max-w-[700px]">

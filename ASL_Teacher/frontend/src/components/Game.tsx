@@ -3,8 +3,11 @@ import Header from "./mini/Header";
 import arrowLeft from "../assets/arrow-left.svg";
 import character from "../assets/character.png";
 import play from "../assets/play.png";
+import { useNavigate } from "react-router-dom";
 
 function Game() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Header />
@@ -52,7 +55,11 @@ function Game() {
             </div>
           </div>
         </div>
-        <button aria-label="back" className="fixed left-[20px] bottom-[20px] z-50 bg-[#F6D052] rounded-3xl p-[10px] w-[56px] h-[56px] flex items-center justify-center shadow-md">
+        <button 
+          aria-label="back" 
+          className="fixed left-[20px] bottom-[20px] z-50 bg-[#F6D052] rounded-3xl p-[10px] w-[56px] h-[56px] flex items-center justify-center shadow-md"
+          onClick={() => navigate('/menu')}
+        >
           <img src={arrowLeft} alt="back" />
         </button>
       </Body>

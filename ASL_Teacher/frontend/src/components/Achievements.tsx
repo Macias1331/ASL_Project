@@ -5,6 +5,7 @@ import lock from "../assets/lock.svg";
 import fire from "../assets/fire.png";
 import arrowLeft from "../assets/arrow-left.svg";
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 type Achievement = {
   id: number;
@@ -37,6 +38,8 @@ function AchievementCard({ a, bg, border }: { a: Achievement; bg: string; border
 }
 
 function Achievements() {
+  const navigate = useNavigate();
+
   const [achievements] = useState<Achievement[]>([
     { id: 1, title: "First Steps", description: "Complete your first lesson.", percent: 100, unlocked: true },
     { id: 2, title: "Study Streak", description: "Study 7 days in a row.", percent: 65, unlocked: false },
@@ -77,7 +80,11 @@ function Achievements() {
             </div>
             
           </div>
-          <button aria-label="back" className="fixed left-[20px] bottom-[20px] z-50 bg-[#F6D052] rounded-3xl p-[10px] w-[56px] h-[56px] flex items-center justify-center">
+          <button 
+            aria-label="back" 
+            className="fixed left-[20px] bottom-[20px] z-50 bg-[#F6D052] rounded-3xl p-[10px] w-[56px] h-[56px] flex items-center justify-center"
+            onClick={() => navigate('/menu')}
+          >
             <img src={arrowLeft} alt="back" />
           </button>
           
