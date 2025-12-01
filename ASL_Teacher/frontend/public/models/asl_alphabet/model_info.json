@@ -1,0 +1,15 @@
+{
+  "type": "cnn",
+  "input_shape": [
+    128,
+    128,
+    3
+  ],
+  "num_classes": 3,
+  "labels": [
+    "A",
+    "B",
+    "C"
+  ],
+  "accuracy": 0.9941
+}
