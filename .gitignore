@@ -22,3 +22,41 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Model files and datasets
+*.pt
+*.pth
+*.h5
+*.hdf5
+*.ckpt
+*.pb
+*.weights
+rgb_imagenet.pt
+rgb_charades.pt
+
+# Video files
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.swf
+raw_videos/
+raw_videos_subset/
+WLASL/start_kit/raw_videos_subset/
+
+# Training outputs
+checkpoints/
+logs/
+tensorboard/
+results/
