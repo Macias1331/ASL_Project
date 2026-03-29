@@ -2,18 +2,27 @@ import './AlphabetPractice.css';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
 
-// The full list of signs your model recognizes
+// The full list of signs your model recognizes (A-Y, excluding J and Z)
 const ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXY".split("");
 
 export default function AlphabetPractice() {
   const webcamRef = useRef<Webcam>(null);
   
-  // Existing States
+  // Detection States
   const [prediction, setPrediction] = useState<string>("None");
   const [confidence, setConfidence] = useState<number>(0);
   
-  // New "Practice" States
+  // Progress States
   const [targetIndex, setTargetIndex] = useState(0);
+
+  // Manual Navigation Functions (Step 2)
+  const handleNext = () => {
+    setTargetIndex((prev) => (prev + 1) % ALPHABET.length);
+  };
+
+  const handleBack = () => {
+    setTargetIndex((prev) => (prev === 0 ? ALPHABET.length - 1 : prev - 1));
+  };
 
   const capture = useCallback(async () => {
     if (webcamRef.current) {
@@ -33,35 +42,37 @@ export default function AlphabetPractice() {
           setPrediction(detected);
           setConfidence(data.confidence);
 
-          // EASY MATCH LOGIC: 
-          // If what you sign matches the current target, jump to the next letter!
+          // Success Logic: Match target with > 75% confidence
           if (detected === ALPHABET[targetIndex] && data.confidence > 0.75) {
-            setTargetIndex((prev) => (prev + 1) % ALPHABET.length);
+            handleNext();
           }
         }
       } catch (error) {
-        console.error("Python server is not responding.");
+        console.error("Python server is not responding. Ensure uvicorn is running.");
       }
     }
-  }, [targetIndex]); // We add targetIndex here so the function knows the current goal
+  }, [targetIndex]);
 
   useEffect(() => {
-    const interval = setInterval(capture, 1000);
+    const interval = setInterval(capture, 1000); // Capture every 1 second
     return () => clearInterval(interval);
   }, [capture]);
 
-  // Progress percentage for the bar
-  const progress = ((targetIndex) / ALPHABET.length) * 100;
+  // Progress percentage calculation
+  const progress = (targetIndex / ALPHABET.length) * 100;
 
   return (
-    <div className="app-container">
-      <h1>ASL Practice Mode</h1>
-
-      {/* Progress Bar UI */}
-      <div className="progress-container">
-        <p>Letter {targetIndex + 1} of {ALPHABET.length}</p>
+    <div className="practice-container">
+      {/* Progress Section */}
+      <div className="progress-section">
+        <span className="progress-label">
+          Letter {targetIndex + 1} of {ALPHABET.length}
+        </span>
         <div className="progress-bar-bg">
-          <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
+          <div 
+            className="progress-bar-fill" 
+            style={{ width: `${progress}%` }}
+          ></div>
         </div>
       </div>
 
@@ -75,21 +86,30 @@ export default function AlphabetPractice() {
         />
 
         <div className="status-card">
-          <div className="target-section">
-            <span className="label">NEXT SIGN:</span>
-            <div className="target-letter">{ALPHABET[targetIndex]}</div>
-          </div>
+          <span className="label">Target Sign</span>
+          <div className="target-letter">{ALPHABET[targetIndex]}</div>
           
-          <hr />
-
           <div className="detected-section">
-            <span className="label">YOU ARE SIGNING:</span>
-            <div className="detected-letter">{prediction}</div>
-            <p>Confidence: {(confidence * 100).toFixed(0)}%</p>
+            <span className="label">Detected</span>
+            <div className="detected-letter">
+              {prediction !== "NONE" ? prediction : "---"}
+            </div>
+            <p style={{ color: '#aaa', fontSize: '0.8rem' }}>
+              Confidence: {(confidence * 100).toFixed(0)}%
+            </p>
+          </div>
+
+          {/* Navigation Controls */}
+          <div className="nav-controls">
+            <button className="nav-button" onClick={handleBack}>
+              Back
+            </button>
+            <button className="nav-button" onClick={handleNext}>
+              Skip
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

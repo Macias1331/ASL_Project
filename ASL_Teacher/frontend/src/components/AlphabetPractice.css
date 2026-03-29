@@ -5,12 +5,48 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #1a1a1a; /* Dark theme matching the app */
+  }
+  
+  /* Progress bar section at the top */
+  .progress-section {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .progress-label {
+    color: #aaa;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .progress-bar-bg {
+    background-color: #333;
+    height: 12px;
+    border-radius: 6px;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .progress-bar-fill {
+    background-color: #F6D052; /* Signature Yellow */
+    height: 100%;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(246, 208, 82, 0.3);
   }
   
   /* Styling for the Webcam feed */
   .webcam-view {
     border-radius: 20px;
-    border: 6px solid #F6D052; /* Matching your project's yellow theme */
+    border: 6px solid #F6D052;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     max-width: 100%;
     height: auto;
@@ -21,7 +57,7 @@
     background-color: #2d2d2d;
     padding: 30px;
     border-radius: 20px;
-    min-width: 280px;
+    min-width: 300px;
     border: 2px solid rgba(255, 255, 255, 0.1);
     text-align: center;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
@@ -37,7 +73,7 @@
   }
   
   .target-letter {
-    font-size: 7rem;
+    font-size: 8rem;
     color: #F6D052;
     font-weight: 900;
     line-height: 1;
@@ -56,25 +92,29 @@
     font-weight: bold;
   }
   
-  /* Progress bar at the top */
-  .progress-container {
-    width: 100%;
-    max-width: 600px;
-    margin-bottom: 20px;
-    text-align: center;
+  /* Navigation Buttons (For Step 2) */
+  .nav-controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
   }
   
-  .progress-bar-bg {
-    background-color: #333;
-    height: 12px;
-    border-radius: 6px;
-    width: 100%;
-    overflow: hidden;
-    margin-top: 8px;
+  .nav-button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
   }
   
-  .progress-bar-fill {
-    background-color: #4caf50;
-    height: 100%;
-    transition: width 0.5s ease-in-out;
+  .nav-button:hover {
+    background-color: #555;
+  }
+  
+  .nav-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
   }
