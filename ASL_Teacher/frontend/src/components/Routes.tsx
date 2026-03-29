@@ -12,6 +12,7 @@ import DressingRoom from "./DressingRoom";
 import { HandsRecorder } from "./HandsRecorder/HandsRecorder";
 import Achievements from "./Achievements";
 import MiniGames from "./MiniGames";
+import AlphabetPractice from "./AlphabetPractice";
 
 const routes = [
   {
@@ -75,7 +76,11 @@ const routes = [
   {
     path: '*',
     element: <Error />
-  }
+  },
+  {
+    path: '/practice-alphabet',
+    element: <AlphabetPractice />
+  },
 ];
 
 export default routes;
