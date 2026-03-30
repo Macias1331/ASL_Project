@@ -1,6 +1,8 @@
 import './AlphabetPractice.css';
+import Sombra from '../assets/sombra.png'
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
+import Header from './mini/Header';
 
 // The full list of signs your model recognizes (A-Y, excluding J and Z)
 const ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXY".split("");
@@ -62,53 +64,56 @@ export default function AlphabetPractice() {
   const progress = (targetIndex / ALPHABET.length) * 100;
 
   return (
-    <div className="practice-container">
-      {/* Progress Section */}
-      <div className="progress-section">
-        <span className="progress-label">
-          Letter {targetIndex + 1} of {ALPHABET.length}
-        </span>
-        <div className="progress-bar-bg">
-          <div 
-            className="progress-bar-fill" 
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-      </div>
-
-      <div className="main-layout">
-        <Webcam
-          audio={false}
-          ref={webcamRef}
-          screenshotFormat="image/jpeg"
-          mirrored={true}
-          className="webcam-view"
-        />
-
-        <div className="status-card">
-          <span className="label">Target Sign</span>
-          <div className="target-letter">{ALPHABET[targetIndex]}</div>
-          
-          <div className="detected-section">
-            <span className="label">Detected</span>
-            <div className="detected-letter">
-              {prediction !== "NONE" ? prediction : "---"}
+    <div>
+      <Header />
+      <div className="practice-container">
+        {/* Progress Section */}
+        <div className="left">
+          <div className="progress-section">
+            <span className="progress-label">
+              Letter {targetIndex + 1} of {ALPHABET.length}
+            </span>
+            <div className="progress-bar-bg">
+              <div
+                className="progress-bar-fill"
+                style={{ width: `${progress}%` }}
+              ></div>
             </div>
-            <p style={{ color: '#aaa', fontSize: '0.8rem' }}>
-              Confidence: {(confidence * 100).toFixed(0)}%
-            </p>
           </div>
-
-          {/* Navigation Controls */}
-          <div className="nav-controls">
-            <button className="nav-button" onClick={handleBack}>
-              Back
-            </button>
-            <button className="nav-button" onClick={handleNext}>
-              Skip
-            </button>
+          <div className="main-layout">
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              mirrored={true}
+              className="webcam-view"
+            />
+            <div className="status-card">
+              <span className="label">Target Sign</span>
+              <div className="target-letter">{ALPHABET[targetIndex]}</div>
+          
+              <div className="detected-section">
+                <span className="label">Detected</span>
+                <div className="detected-letter">
+                  {prediction !== "NONE" ? prediction : "---"}
+                </div>
+                <p style={{ color: '#aaa', fontSize: '0.8rem' }}>
+                  Confidence: {(confidence * 100).toFixed(0)}%
+                </p>
+              </div>
+              {/* Navigation Controls */}
+              <div className="nav-controls">
+                <button className="nav-button" onClick={handleBack}>
+                  Back
+                </button>
+                <button className="nav-button" onClick={handleNext}>
+                  Skip
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+        <img src={Sombra} alt="Sombra" className='sombra' />
       </div>
     </div>
   );

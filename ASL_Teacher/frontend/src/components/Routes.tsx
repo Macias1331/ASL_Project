@@ -50,7 +50,7 @@ const routes = [
       },
       {
         path: '/learning-mode',
-        element: <Game />
+        element: <AlphabetPractice />
       },
       {
         path: '/dressing-room',
