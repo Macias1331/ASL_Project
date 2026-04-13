@@ -13,6 +13,7 @@ import { HandsRecorder } from "./HandsRecorder/HandsRecorder";
 import Achievements from "./Achievements";
 import MiniGames from "./MiniGames";
 import AlphabetPractice from "./AlphabetPractice";
+import InboxScreen from "./Inbox";
 
 const routes = [
   {
@@ -67,6 +68,10 @@ const routes = [
       {
         path: '/mini-games',
         element: <MiniGames />
+      },
+      {
+        path: '/Inbox',
+        element: <InboxScreen />
       },
 
     ]
