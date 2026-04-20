@@ -1,0 +1,40 @@
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #1a1a1a;
+    min-height: 100vh;
+    color: white;
+  }
+  
+  .word-display {
+    display: flex;
+    gap: 15px;
+    margin: 30px 0;
+  }
+  
+  .letter-slot {
+    font-size: 4rem;
+    font-weight: 900;
+    padding: 10px 20px;
+    border-bottom: 5px solid #444;
+    color: #555;
+  }
+  
+  .letter-slot.active {
+    color: #F6D052; /* Current target letter */
+    border-bottom-color: #F6D052;
+    transform: scale(1.1);
+  }
+  
+  .letter-slot.done {
+    color: #4caf50; /* Already spelled */
+    border-bottom-color: #4caf50;
+  }
+  
+  .game-message {
+    font-size: 1.5rem;
+    color: #F6D052;
+    height: 2rem;
+  }
