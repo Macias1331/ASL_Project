@@ -13,6 +13,8 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  justify-content: center;
+  position: relative;
   gap: 20px;
   min-height: calc(100vh - 75px);
   background: radial-gradient(circle at 18% 22%, #275a88 0%, transparent 40%),
@@ -25,13 +27,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
-  min-width: 0;
+  flex: 0 1 980px;
+  width: min(100%, 980px);
+  margin-inline: auto;
 }
 
 .progress-section {
   width: 100%;
-  max-width: 1060px;
+  max-width: 980px;
   text-align: center;
   margin-bottom: 14px;
 }
@@ -63,9 +66,9 @@
 
 .main-layout {
   width: 100%;
-  max-width: 1060px;
+  max-width: 980px;
   display: grid;
-  grid-template-columns: 1.2fr 0.9fr;
+  grid-template-columns: minmax(460px, 1fr) 340px;
   gap: 18px;
 }
 
@@ -236,12 +239,19 @@
 }
 
 .sombra {
-  align-self: flex-start;
-  margin-top: 14px;
+  position: absolute;
+  right: 24px;
+  top: 120px;
   height: 280px;
   max-width: 190px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
+}
+
+@media (max-width: 1400px) {
+  .sombra {
+    display: none;
+  }
 }
 
 @media (max-width: 1100px) {
@@ -249,8 +259,9 @@
     grid-template-columns: 1fr;
   }
 
-  .sombra {
-    display: none;
+  .left {
+    flex-basis: 100%;
+    width: 100%;
   }
 }
 
