@@ -3,6 +3,7 @@ import Body from './mini/Body';
 import arrowLeft from "../assets/arrow-left.svg";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import spellingBee from '../assets/Spelling_Bee_Game.png'
 
 const CARD_COUNT = 8;
 
@@ -22,11 +23,21 @@ function MiniGames() {
 
 					<div className="grid grid-cols-4 gap-x-8 gap-y-8 pb-20">
 						{cards.map((c, i) => (
+							(i == 0) ?
+							<button
+								key={c.id}
+								onClick={() => navigate("spelling-bee")}
+								className={`bg-white rounded-xl w-full aspect-[4/3] shadow-md focus:outline-none transition-all duration-150 flex items-center justify-center ${selected === i ? 'ring-[6px] ring-[#F6D052]' : 'hover:-translate-y-1'}`}
+							>
+								<img src={spellingBee} alt="spelling bee" />
+							</button> :
 							<button
 								key={c.id}
 								onClick={() => setSelected(i)}
-								className={`bg-white rounded-xl w-full aspect-[4/3] shadow-md focus:outline-none transition-all duration-150 flex items-center justify-center ${selected === i ? 'ring-[6px] ring-[#F6D052]' : 'hover:-translate-y-1'}`}
-							/>
+								className={`bg-[rgb(200,200,200)] rounded-xl w-full aspect-[4/4] shadow-md focus:outline-none transition-all duration-150 flex items-center justify-center ${selected === i ? 'ring-[6px] ring-[#F6D052]' : 'hover:-translate-y-1'}`}
+							>
+								<h1 className="font-bold text-2xl">Buy DLC: ASL Master Bundle ($40)</h1>
+							</button>
 						))}
 					</div>
 

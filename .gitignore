@@ -60,3 +60,5 @@ checkpoints/
 logs/
 tensorboard/
 results/
+
+.venv

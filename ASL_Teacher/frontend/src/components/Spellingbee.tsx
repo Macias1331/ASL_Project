@@ -1,6 +1,8 @@
 import './Spellingbee.css';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
+import Header from './mini/Header';
+import Sombra from '../assets/sombra.png'
 
 const WORDS = ["CSE", "CAT", "BARDAN", "NOE", "ANDREW", "APPLE"];
 
@@ -62,29 +64,33 @@ export default function SpellingBee() {
   }, [capture]);
 
   return (
-    <div className="game-container">
-      <h2 className="game-title">ASL Spelling Bee</h2>
-      <p className="game-message">{message}</p>
+    <div className='main'>
+      <Header />
+      <div className="game-container">
+        <h2 className="game-title">ASL Spelling Bee</h2>
+        <p className="game-message">{message}</p>
 
-      <div className="word-display">
-        {currentWord.split("").map((letter, index) => (
-          <span 
-            key={index} 
-            className={`letter-slot ${index === charIndex ? 'active' : index < charIndex ? 'done' : ''}`}
-          >
-            {letter}
-          </span>
-        ))}
-      </div>
+        <div className="word-display">
+          {currentWord.split("").map((letter, index) => (
+            <span 
+              key={index} 
+              className={`letter-slot ${index === charIndex ? 'active' : index < charIndex ? 'done' : ''}`}
+            >
+              {letter}
+            </span>
+          ))}
+        </div>
 
-      <div className="game-layout">
-        <Webcam ref={webcamRef} screenshotFormat="image/jpeg" mirrored={true} className="webcam-view" />
-        
-        <div className="prediction-box">
-          <span className="label">Your Sign:</span>
-          <div className="detected-text">{prediction}</div>
+        <div className="game-layout">
+          <Webcam ref={webcamRef} screenshotFormat="image/jpeg" mirrored={true} className="webcam-view" />
+          
+          <div className="prediction-box">
+            <span className="label">Your Sign:</span>
+            <div className="detected-text">{prediction}</div>
+          </div>
         </div>
       </div>
+      <img src={Sombra} alt="Sombra" className='sombra' />
     </div>
   );
 }
