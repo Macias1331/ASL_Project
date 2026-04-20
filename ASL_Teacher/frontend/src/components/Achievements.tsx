@@ -6,6 +6,7 @@ import fire from "../assets/fire.png";
 import arrowLeft from "../assets/arrow-left.svg";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import stara from "../assets/stara.png";
 
 type Achievement = {
   id: number;
@@ -15,24 +16,59 @@ type Achievement = {
   unlocked: boolean;
 };
 
-function AchievementCard({ a, bg, border }: { a: Achievement; bg: string; border: string }) {
+function AchievementCard({ a }: { a: Achievement }) {
+  // Determine the visual state of the card
+  const isComplete = a.percent === 100 || a.unlocked;
+  const isStarted = a.percent > 0 && !isComplete;
+
+  // Dynamic classes based on achievement progress
+  const cardTheme = isComplete
+    ? "bg-gradient-to-r from-[#FFD700] to-[#FDB931] border-[#FFFFFF] shadow-[0_0_15px_rgba(253,185,49,0.4)] text-black"
+    : isStarted
+    ? "bg-[#243447] border-[#3A4D63] text-white"
+    : "bg-[#1A2533] border-[#2A3A4D] text-gray-500 opacity-80 grayscale-[50%]";
+
   return (
     <div
-      className="rounded-3xl h-[96px] flex items-center p-[18px] w-full"
-      style={{ background: bg, border: `4px solid ${border}` }}
+      className={`rounded-3xl border-4 h-[100px] flex items-center p-[16px] w-full transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${cardTheme}`}
     >
-      <div className="ml-[12px] w-[54px] h-[54px] bg-white/30 rounded-xl flex items-center justify-center">
-        {a.unlocked ? (
-          <img src={star} alt="star" className="h-8 w-8" />
+      {/* Icon Container */}
+      <div 
+        className={`shrink-0 w-[56px] h-[56px] rounded-2xl flex items-center justify-center shadow-inner ${
+          isComplete ? "bg-white/40" : "bg-black/30"
+        }`}
+      >
+        {isComplete ? (
+          <img src={star} alt="star" className="h-8 w-8 drop-shadow-md animate-pulse" />
         ) : (
-          <img src={lock} alt="locked" className="h-6 w-6 opacity-70" />
+          <img src={lock} alt="locked" className="h-6 w-6 opacity-60" />
         )}
       </div>
-      <div className="ml-[16px] mr-auto max-w-3/4">
-        <p className="text-2xl font-bold">{a.title}</p>
-        <p className="text-sm text-[#6B6B6B] mt-[4px]">{a.description}</p>
+
+      {/* Text Content */}
+      <div className="ml-[16px] flex-1">
+        <p className={`text-xl font-bold tracking-wide ${isComplete ? "text-black" : "text-white"}`}>
+          {a.title}
+        </p>
+        <p className={`text-sm mt-1 ${isComplete ? "text-black/70 font-semibold" : "text-gray-400"}`}>
+          {a.description}
+        </p>
       </div>
-      <div className="mr-[16px] text-xl font-bold">{a.percent}%</div>
+
+      {/* Progress Bar Section */}
+      <div className="ml-[16px] w-[120px] shrink-0 flex flex-col items-end gap-1.5">
+        <span className={`text-lg font-bold ${isComplete ? "text-black" : "text-white"}`}>
+          {a.percent}%
+        </span>
+        <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden shadow-inner">
+          <div
+            className={`h-full rounded-full transition-all duration-1000 ease-out ${
+              isComplete ? "bg-white" : "bg-[#4ade80]"
+            }`}
+            style={{ width: `${a.percent}%` }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -44,84 +80,80 @@ function Achievements() {
     { id: 1, title: "First Steps", description: "Complete your first lesson.", percent: 100, unlocked: true },
     { id: 2, title: "Study Streak", description: "Study 7 days in a row.", percent: 65, unlocked: false },
     { id: 3, title: "Social Star", description: "Connect with 10 friends.", percent: 40, unlocked: false },
-    { id: 4, title: "Fluency", description: "Achieve 80% accuracy on tests.", percent: 95, unlocked: true },
+    { id: 4, title: "Fluency", description: "Achieve 80% accuracy on tests.", percent: 95, unlocked: false },
     { id: 5, title: "Marathon", description: "Practice 100 minutes total.", percent: 28, unlocked: false },
-    { id: 6, title: "Collector", description: "Complete 20 achievements.", percent: 30, unlocked: true },
+    { id: 6, title: "Collector", description: "Complete 20 achievements.", percent: 100, unlocked: true },
     { id: 7, title: "Sharpshooter", description: "Finish a mini-game with perfect score.", percent: 5, unlocked: false },
     { id: 9, title: "Legend", description: "Complete all achievements.", percent: 12, unlocked: false },
-    { id: 10, title: "?", description: "Hidden.", percent: 12, unlocked: false },
-    { id: 11, title: "?", description: "Hidden.", percent: 12, unlocked: false },
-    { id: 12, title: "?", description: "Hidden.", percent: 12, unlocked: false },
-    { id: 13, title: "?", description: "Complete all achievements.", percent: 12, unlocked: false },
-    
+    { id: 10, title: "?", description: "Hidden.", percent: 0, unlocked: false },
+    { id: 11, title: "?", description: "Hidden.", percent: 0, unlocked: false },
+    { id: 12, title: "?", description: "Hidden.", percent: 0, unlocked: false },
+    { id: 13, title: "?", description: "Complete all achievements.", percent: 0, unlocked: false },
   ]);
 
   return (
     <>
       <Header />
-      <Body tailwind="flex justify-center">
-        <div className="w-full max-w-[1200px] flex gap-[30px]">
-          <div className="w-[420px] h-full flex items-center justify-center">
-            <div className="h-[460px] w-full bg-transparent flex flex-col items-center justify-center">
-              <div className="mr-50 mb-10 h-[400px] w-[400px] bg-transparent border border-white/10 rounded-md flex items-center justify-center">
-                <img src={fire} alt="character" className="h-[400px] w-[400px] object-contain" />
-              </div>
-              <div className=" mr-50 grid grid-cols-6 gap-[14px] justify-center mt-auto w-[360px]">
-                {achievements.map((a, i) => (
-                  <div key={i} className="relative h-[36px] w-[36px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-                    {a.unlocked && (
-                      <svg className="h-[20px] w-[20px] text-[#24E21D]" viewBox="0 0 24 24" fill="#24E21D" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 15l-3.5-3.5 1.4-1.4L10 12.2 15.1 7l1.4 1.4z" />
-                      </svg>
-                    )}
-                  </div>
-                ))}
+      <Body tailwind="flex justify-center items-center">
+        <div className="w-full max-w-[1200px] flex gap-[40px] items-start mt-6">
+          
+          {/* Left Panel: Character Showcase */}
+          <div className="w-[420px] flex flex-col items-center justify-center bg-black/20 p-8 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm">
+            <div className="relative h-[350px] w-[350px] flex items-center justify-center">
+              {/* Added a subtle glow effect behind the character */}
+              <div className="absolute inset-0 bg-[#F6D052] blur-[100px] opacity-20 rounded-full animate-pulse" />
+              <img src={stara} alt="character" className="relative h-[350px] w-[350px] object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" />
+            </div>
+            
+            {/* Condensed Achievement Dots */}
+            <div className="grid grid-cols-6 gap-[12px] justify-center mt-8 w-full px-4">
+              {achievements.map((a, i) => (
+                <div 
+                  key={i} 
+                  className={`relative h-[36px] w-[36px] rounded-full flex items-center justify-center transition-all ${
+                    a.unlocked || a.percent === 100 
+                      ? "bg-[#24E21D] shadow-[0_0_10px_rgba(36,226,29,0.5)]" 
+                      : "bg-[#D9D9D9]/20"
+                  }`}
+                >
+                  {(a.unlocked || a.percent === 100) && (
+                    <svg className="h-[20px] w-[20px] text-white" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 15l-3.5-3.5 1.4-1.4L10 12.2 15.1 7l1.4 1.4z" />
+                    </svg>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Back Button */}
+          <button 
+            aria-label="back" 
+            className="fixed left-[30px] bottom-[30px] z-50 bg-[#F6D052] rounded-full p-[14px] w-[64px] h-[64px] flex items-center justify-center shadow-lg hover:bg-yellow-400 hover:scale-110 transition-all"
+            onClick={() => navigate('/menu')}
+          >
+            <img src={arrowLeft} alt="back" className="w-8 h-8" />
+          </button>
+          
+          {/* Right Panel: Achievement List */}
+          <div className="flex-1 bg-black/40 rounded-3xl p-[24px] border border-white/10 shadow-2xl flex flex-col h-[calc(100vh-140px)]">
+            {/* Header Title */}
+            <div className="flex justify-center mb-6">
+              <div className="bg-gradient-to-r from-[#FCE17A] to-[#FFD700] px-[32px] py-[10px] rounded-full text-black text-2xl font-black uppercase tracking-wider shadow-lg">
+                Achievements
               </div>
             </div>
             
-          </div>
-          <button 
-            aria-label="back" 
-            className="fixed left-[20px] bottom-[20px] z-50 bg-[#F6D052] rounded-3xl p-[10px] w-[56px] h-[56px] flex items-center justify-center"
-            onClick={() => navigate('/menu')}
-          >
-            <img src={arrowLeft} alt="back" />
-          </button>
-          
-          <div className="flex-1 bg-transparent rounded-2xl p-[16px] flex flex-col">
-            <div className="flex items-center gap-[12px]">
-              <div className="flex-1" />
-              <div className="flex-1 flex justify-center">
-                <div className="bg-[#FFEFB8] px-[22px] py-[8px] rounded-3xl text-2xl font-bold">Achievements</div>
-              </div>
-              <div className="flex-1" />
-            </div>
-            <div className="mt-[24px] p-[12px] bg-transparent rounded-xl h-[calc(100vh-200px)] overflow-y-auto friends-scroll">
-              <div className="flex flex-col gap-[18px]">
-                {achievements.map((a) => {
-                  let bg = "#FFFFFF";
-                  let border = "#DDDDDD";
-                  if (a.percent === 100) {
-                    bg = "#ffffffff";
-                    border = "#F6D052";
-                  } else if (a.unlocked) {
-                    bg = "#a8e1a6ff";
-                    border = "#FF9EB3";
-                  } else if (a.percent > 75) {
-                    bg = "#d1b1b1ff";
-                    border = "#FFFFFF";
-                  } else if (a.percent > 30) {
-                    bg = "#FFFFFF";
-                    border = "#D33";
-                  } else {
-                    bg = "#8d89d2ff";
-                    border = "#FFFFFF";
-                  }
-                  return <AchievementCard key={a.id} a={a} bg={bg} border={border} />;
-                })}
+            {/* Scrollable List */}
+            <div className="flex-1 overflow-y-auto friends-scroll pr-2">
+              <div className="flex flex-col gap-[16px] pb-4">
+                {achievements.map((a) => (
+                  <AchievementCard key={a.id} a={a} />
+                ))}
               </div>
             </div>
           </div>
+
         </div>
       </Body>
     </>
