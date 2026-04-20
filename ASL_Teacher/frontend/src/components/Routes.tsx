@@ -5,7 +5,6 @@ import Auth from "./Auth";
 import Store from "./Store";
 import Friends from "./Friends";
 import Settings from "./Settings";
-import Game from "./Game";
 import Error from "./Error";
 import DressingRoom from "./DressingRoom";
 import { HandsRecorder } from "./HandsRecorder/HandsRecorder";
@@ -16,6 +15,7 @@ import InboxScreen from "./Inbox";
 import Spellingbee from "./Spellingbee"; 
 import BattlePass from "./Battlepass";
 import PurchaseItems from "./PurchaseItems"
+import PurchaseChub from "./PurchaseChub";
 
 const routes = [
   {
@@ -82,6 +82,10 @@ const routes = [
       {
         path: '/purchase',
         element: <PurchaseItems />
+      },
+      {
+        path: "/purchaseChub",
+        element: <PurchaseChub />
       }
     ]
   },

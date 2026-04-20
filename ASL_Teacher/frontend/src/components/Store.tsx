@@ -3,6 +3,8 @@ import Header from "./mini/Header";
 import Button from "./mini/Button";
 import arrowLeft from "../assets/arrow-left.svg";
 import { useNavigate } from "react-router-dom";
+import chub from "../assets/chub.png";
+
 
 // Standard Lock Icon
 const LockIcon = ({ className = "w-8 h-8" }) => (
@@ -32,6 +34,8 @@ function Store() {
   const handlePurchaseDLC = () => navigate('/purchase');
   const handlePurchasePass = () => navigate('/purchase');
   const handleUnlockFeatured = () => navigate('/purchase');
+
+  const handlePurchaseChub = () => navigate('/purchaseChub');
 
   return (
     <>
@@ -101,7 +105,31 @@ function Store() {
             </div>
           </div>
 
-          <div className="bg-white rounded-[2rem] shadow-md border border-gray-100"></div>
+          <div
+            onClick={handlePurchaseChub}
+            className="relative bg-black rounded-[2rem] shadow-md flex items-center justify-center cursor-pointer overflow-hidden hover:scale-[1.02] transition"
+          >
+            <img
+              src={chub}
+              alt="chub"
+              className="max-h-[500px] object-contain"
+            />
+
+            <div className="absolute bottom-3 left-3 bg-black/70 rounded-full p-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6 text-white"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
 
         {/* Footer Navigation */}
