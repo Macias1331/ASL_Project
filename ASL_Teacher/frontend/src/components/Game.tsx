@@ -1,12 +1,14 @@
 import Body from "./mini/Body";
 import Header from "./mini/Header";
 import arrowLeft from "../assets/arrow-left.svg";
-import character from "../assets/character.png";
 import play from "../assets/play.png";
 import { useNavigate } from "react-router-dom";
+import { useCharacter } from "./characterContext";
+
 
 function Game() {
   const navigate = useNavigate();
+  const { selectedCharacter } = useCharacter();
 
   return (
     <>
@@ -26,7 +28,10 @@ function Game() {
             </div>
             <div className="mt-[12px] border-t border-white/20 pt-[12px]">
               <div className="bg-white rounded-md p-[8px]">
-                <img src={character} alt="camera" className="w-full h-[540px] object-cover rounded-md" />
+                <img
+                  src={selectedCharacter.image}
+                  alt={selectedCharacter.name}
+                />
               </div>
             </div>
           </div>
