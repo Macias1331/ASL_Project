@@ -2,11 +2,12 @@ import Header from "./mini/Header";
 import fire from "../assets/fire.png";
 import star from "../assets/star.png";
 import Body from "./mini/Body";
-import character from "../assets/character.png";
 import { useNavigate } from "react-router-dom";
+import { useCharacter } from "./characterContext";
 
 function MenuScreen() {
   const navigate = useNavigate();
+  const { selectedCharacter } = useCharacter();
 
   return (
     <>
@@ -93,8 +94,12 @@ function MenuScreen() {
           </div>
 
           {/*character*/}
-          <div className="flex-1 flex justify-end">
-            <img src={character} alt='your character' />
+          <div className="flex-1 flex justify-end pr-[200px]">
+            <img
+              src={selectedCharacter.image}
+              alt={selectedCharacter.name}
+              className="max-h-[800px]"
+            />
           </div>
 
           <div className="flex justify-end gap-[30px]">

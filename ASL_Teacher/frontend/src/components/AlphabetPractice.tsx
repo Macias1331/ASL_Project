@@ -1,14 +1,15 @@
 import './AlphabetPractice.css';
-import Sombra from '../assets/sombra.png'
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
 import Header from './mini/Header';
+import { useCharacter } from './characterContext';
 
 // The full list of signs your model recognizes (A-Y, excluding J and Z)
 const ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXY".split("");
 
 export default function AlphabetPractice() {
   const webcamRef = useRef<Webcam>(null);
+  const { selectedCharacter } = useCharacter();
   
   // Detection States
   const [prediction, setPrediction] = useState<string>("None");
@@ -113,7 +114,11 @@ export default function AlphabetPractice() {
             </div>
           </div>
         </div>
-        <img src={Sombra} alt="Sombra" className='sombra' />
+        <img
+          src={selectedCharacter.image}
+          alt={selectedCharacter.name}
+          className='sombra'
+        />
       </div>
     </div>
   );
