@@ -19,7 +19,7 @@ function Signup() {
   }
 
   function handleSubmit() {
-    navigate('/login');
+    navigate('/');
   }
 
   return (

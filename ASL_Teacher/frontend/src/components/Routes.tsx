@@ -14,6 +14,7 @@ import MiniGames from "./MiniGames";
 import AlphabetPractice from "./AlphabetPractice";
 import InboxScreen from "./Inbox";
 import Spellingbee from "./Spellingbee"; 
+import BattlePass from "./Battlepass";
 
 const routes = [
   {
@@ -73,7 +74,10 @@ const routes = [
         path: '/mini-games/spelling-bee', 
         element: <Spellingbee />
       },
-
+      {
+        path: '/battle-pass',
+        element: <BattlePass />
+      }
     ]
   },
 

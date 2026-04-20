@@ -3,12 +3,13 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
 import Header from './mini/Header';
 import Sombra from '../assets/sombra.png'
+import { useCharacter } from "./characterContext";
 
 const WORDS = ["CSE", "CAT", "BARDAN", "NOE", "ANDREW", "APPLE"];
 
 export default function SpellingBee() {
   const webcamRef = useRef<Webcam>(null);
-  
+  const { selectedCharacter } = useCharacter();
   // states
   const [wordIndex, setWordIndex] = useState(0); 
   const [charIndex, setCharIndex] = useState(0); 
@@ -90,7 +91,7 @@ export default function SpellingBee() {
           </div>
         </div>
       </div>
-      <img src={Sombra} alt="Sombra" className='sombra' />
+      <img src={selectedCharacter.image} alt="Sombra" className='sombra' />
     </div>
   );
 }
