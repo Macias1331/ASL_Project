@@ -9,7 +9,7 @@ const CARD_COUNT = 8;
 
 function MiniGames() {
 	const navigate = useNavigate();
-	const [selected, setSelected] = useState<number>(2);
+	const [selected, setSelected] = useState<number>(0);
 	const cards = new Array(CARD_COUNT).fill(null).map((_, i) => ({ id: i + 1 }));
 
 	return (
@@ -33,7 +33,7 @@ function MiniGames() {
 							</button> :
 							<button
 								key={c.id}
-								onClick={() => setSelected(i)}
+								onClick={() => navigate("/store")}
 								className={`bg-[rgb(200,200,200)] rounded-xl w-full aspect-[4/4] shadow-md focus:outline-none transition-all duration-150 flex items-center justify-center ${selected === i ? 'ring-[6px] ring-[#F6D052]' : 'hover:-translate-y-1'}`}
 							>
 								<h1 className="font-bold text-2xl">Buy DLC: ASL Master Bundle ($40)</h1>
