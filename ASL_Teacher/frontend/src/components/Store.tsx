@@ -112,7 +112,7 @@ function Store() {
             <img
               src={chub}
               alt="chub"
-              className="max-h-[500px] object-contain"
+              className="max-h-[400px] object-contain"
             />
 
             <div className="absolute bottom-3 left-3 bg-black/70 rounded-full p-2">
