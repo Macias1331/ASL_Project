@@ -15,6 +15,7 @@ import AlphabetPractice from "./AlphabetPractice";
 import InboxScreen from "./Inbox";
 import Spellingbee from "./Spellingbee"; 
 import BattlePass from "./Battlepass";
+import PurchaseItems from "./PurchaseItems"
 
 const routes = [
   {
@@ -77,6 +78,10 @@ const routes = [
       {
         path: '/battle-pass',
         element: <BattlePass />
+      },
+      {
+        path: '/purchase',
+        element: <PurchaseItems />
       }
     ]
   },
