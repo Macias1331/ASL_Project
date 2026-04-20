@@ -6,10 +6,17 @@ import Button from "./mini/Button";
 import arrowLeft from "../assets/arrow-left.svg";
 import { useCharacter } from "./characterContext";
 import { characters } from "./characters";
+import { hats } from "./hats";
 
 function DressingRoom() {
   const navigate = useNavigate();
-  const { selectedCharacter, setSelectedCharacter } = useCharacter();
+  const {
+    selectedCharacter,
+    setSelectedCharacter,
+    selectedHat,
+    setSelectedHat,
+  } = useCharacter();
+
   const [activeTab, setActiveTab] = useState<"characters" | "cosmetics">("characters");
 
   return (
@@ -17,11 +24,21 @@ function DressingRoom() {
       <Header />
       <Body tailwind="flex">
         <div className="flex-1 flex flex-col">
-          <img
-            src={selectedCharacter.image}
-            alt={selectedCharacter.name}
-            className="size-125 self-center mt-auto object-contain"
-          />
+          <div className="relative size-125 self-center mt-auto">
+            <img
+              src={selectedCharacter.image}
+              alt={selectedCharacter.name}
+              className="w-full h-full object-contain"
+            />
+
+            {selectedHat && (
+              <img
+                src={selectedHat.image}
+                alt={selectedHat.name}
+                className={selectedCharacter.hatStyle}
+              />
+            )}
+          </div>
 
           <h2 className="bg-white text-3xl px-[20px] self-center rounded-lg">
             {selectedCharacter.name}
@@ -44,10 +61,10 @@ function DressingRoom() {
 
             <button
               onClick={() => setActiveTab("characters")}
-              className={`flex-1 h-full rounded-xl flex items-center justify-center text-white text-xl transition ${
+              className={`flex-1 h-full rounded-xl flex items-center justify-center text-xl transition ${
                 activeTab === "characters"
                   ? "bg-[#F6D052] text-black"
-                  : "bg-[#4B5988]"
+                  : "bg-[#4B5988] text-white"
               }`}
             >
               Characters
@@ -55,10 +72,10 @@ function DressingRoom() {
 
             <button
               onClick={() => setActiveTab("cosmetics")}
-              className={`flex-1 h-full rounded-xl flex items-center justify-center text-white text-xl transition ${
+              className={`flex-1 h-full rounded-xl flex items-center justify-center text-xl transition ${
                 activeTab === "cosmetics"
                   ? "bg-[#F6D052] text-black"
-                  : "bg-[#4B5988]"
+                  : "bg-[#4B5988] text-white"
               }`}
             >
               Cosmetics
@@ -87,10 +104,34 @@ function DressingRoom() {
 
             {activeTab === "cosmetics" && (
               <>
-                <div className="bg-black rounded-xl"></div>
-                <div className="bg-black rounded-xl"></div>
-                <div className="bg-black rounded-xl"></div>
-                <div className="bg-black rounded-xl"></div>
+                <button
+                  onClick={() => setSelectedHat(null)}
+                  className={`rounded-xl flex items-center justify-center text-xl font-bold ${
+                    selectedHat === null
+                      ? "bg-[#F6D052] border-4 border-white text-black"
+                      : "bg-black border-4 border-transparent text-white"
+                  }`}
+                >
+                  No Hat
+                </button>
+
+                {hats.map((hat) => (
+                  <button
+                    key={hat.id}
+                    onClick={() => setSelectedHat(hat)}
+                    className={`rounded-xl flex items-center justify-center ${
+                      selectedHat?.id === hat.id
+                        ? "bg-[#F6D052] border-4 border-white"
+                        : "bg-black border-4 border-transparent"
+                    }`}
+                  >
+                    <img
+                      src={hat.image}
+                      alt={hat.name}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </button>
+                ))}
               </>
             )}
           </div>

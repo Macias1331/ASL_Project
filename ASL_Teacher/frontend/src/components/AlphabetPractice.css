@@ -128,11 +128,12 @@
   }
 
   .sombra {
+    position: relative;
     justify-self: self-end;
     align-self: self-start;
     margin-top: 20px;
+    width: 300px;
     height: 300px;
-    max-width: 200px;
     border: 2px solid rgb(150,150,150);
     border-radius: 10px;
   }

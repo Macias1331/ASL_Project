@@ -9,7 +9,7 @@ const ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXY".split("");
 
 export default function AlphabetPractice() {
   const webcamRef = useRef<Webcam>(null);
-  const { selectedCharacter } = useCharacter();
+  const { selectedCharacter, selectedHat } = useCharacter();
   
   // Detection States
   const [prediction, setPrediction] = useState<string>("None");
@@ -114,11 +114,25 @@ export default function AlphabetPractice() {
             </div>
           </div>
         </div>
-        <img
-          src={selectedCharacter.image}
-          alt={selectedCharacter.name}
-          className='sombra'
-        />
+        <div className="flex-1 flex justify-end items-end">
+        <div className="relative w-[420px] h-[420px]">
+          <div className="sombra">
+            <img
+              src={selectedCharacter.image}
+              alt={selectedCharacter.name}
+              className="w-full h-full object-contain"
+            />
+
+            {selectedHat && (
+              <img
+                src={selectedHat.image}
+                alt={selectedHat.name}
+                className={selectedCharacter.hatStyle}
+              />
+            )}
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   );

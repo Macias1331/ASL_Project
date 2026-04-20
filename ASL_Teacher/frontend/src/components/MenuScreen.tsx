@@ -7,7 +7,7 @@ import { useCharacter } from "./characterContext";
 
 function MenuScreen() {
   const navigate = useNavigate();
-  const { selectedCharacter } = useCharacter();
+  const { selectedCharacter, selectedHat } = useCharacter();
 
   return (
     <>
@@ -94,12 +94,24 @@ function MenuScreen() {
           </div>
 
           {/*character*/}
-          <div className="flex-1 flex justify-end pr-[200px]">
-            <img
-              src={selectedCharacter.image}
-              alt={selectedCharacter.name}
-              className="max-h-[800px]"
-            />
+          <div className="flex-1 flex justify-end pr-[200px] pb-[200px]">
+            <div className="flex-1 flex justify-end items-end">
+              <div className="relative w-[600px] h-[600px]">
+                <img
+                  src={selectedCharacter.image}
+                  alt={selectedCharacter.name}
+                  className="w-full h-full object-contain"
+                />
+
+                {selectedHat && (
+                  <img
+                    src={selectedHat.image}
+                    alt={selectedHat.name}
+                    className={selectedCharacter.hatStyle}
+                  />
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-end gap-[30px]">
