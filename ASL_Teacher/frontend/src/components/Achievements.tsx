@@ -95,10 +95,10 @@ function Achievements() {
     <>
       <Header />
       <Body tailwind="flex justify-center items-center">
-        <div className="w-full max-w-[1200px] flex gap-[40px] items-start mt-6">
+        <div className="w-full max-w-[2000px] flex gap-[40px] items-start mt-6">
           
-          {/* Left Panel: Character Showcase */}
-          <div className="w-[420px] flex flex-col items-center justify-center bg-black/20 p-8 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm">
+          {/* Left Panel: Character Showcase - Increased width and removed border/shadow */}
+          <div className="w-[1000px] h-[calc(100vh-140px)] flex flex-col items-center justify-center bg-transparent p-8 rounded-3xl">
             <div className="relative h-[350px] w-[350px] flex items-center justify-center">
               {/* Added a subtle glow effect behind the character */}
               <div className="absolute inset-0 bg-[#F6D052] blur-[100px] opacity-20 rounded-full animate-pulse" />
@@ -106,18 +106,18 @@ function Achievements() {
             </div>
             
             {/* Condensed Achievement Dots */}
-            <div className="grid grid-cols-6 gap-[12px] justify-center mt-8 w-full px-4">
+            <div className="grid grid-cols-6 gap-[80px] justify-center mt-8 w-full px-4">
               {achievements.map((a, i) => (
                 <div 
                   key={i} 
-                  className={`relative h-[36px] w-[36px] rounded-full flex items-center justify-center transition-all ${
+                  className={`relative h-[90px] w-[90px] rounded-full flex items-center justify-center transition-all ${
                     a.unlocked || a.percent === 100 
                       ? "bg-[#24E21D] shadow-[0_0_10px_rgba(36,226,29,0.5)]" 
                       : "bg-[#D9D9D9]/20"
                   }`}
                 >
                   {(a.unlocked || a.percent === 100) && (
-                    <svg className="h-[20px] w-[20px] text-white" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="h-[60px] w-[60px] text-white" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                       <path d="M10 15l-3.5-3.5 1.4-1.4L10 12.2 15.1 7l1.4 1.4z" />
                     </svg>
                   )}
