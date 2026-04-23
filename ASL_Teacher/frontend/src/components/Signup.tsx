@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import signQuestLogo from "../assets/signQuestWhite.png";
 import TextInput from "./mini/TextInput";
+import { signup } from "../api";
 
 function Signup() {
   const navigate = useNavigate();
@@ -11,15 +12,55 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  function handleState<T extends string>(setter : React.Dispatch<React.SetStateAction<T>>) {
-    return (event : React.ChangeEvent<HTMLInputElement>) => {
+  function handleState<T extends string>(setter: React.Dispatch<React.SetStateAction<T>>) {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
       return setter(event.target.value as T);
-    }
+    };
   }
 
-  function handleSubmit() {
-    navigate('/');
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    setError('');
+
+    if (!email || !username || !password || !confirmPassword) {
+      setError('Please fill out all required fields.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await signup(email, username, password);
+      // Redirect to login after successful signup
+      navigate('/');
+    } catch (err: unknown) {
+      if (
+        err &&
+        typeof err === 'object' &&
+        'response' in err &&
+        err.response &&
+        typeof err.response === 'object' &&
+        'data' in err.response
+      ) {
+        const data = (err.response as { data: { detail?: string } }).data;
+        if (data?.detail) {
+          setError(data.detail);
+        } else {
+          setError('Signup failed. Please try again.');
+        }
+      } else {
+        setError('Could not reach the server. Is the backend running?');
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -35,7 +76,9 @@ function Signup() {
           </figcaption>
         </figure>
         <div className="flex-1">
-          <form className="
+          <form
+            onSubmit={handleSubmit}
+            className="
               bg-white pt-10 flex flex-col w-[600px] h-[700px] place-self-center 
               rounded-2xl border-[#0258A9] border-[3px] pr-20 pl-20
             "
@@ -53,11 +96,20 @@ function Signup() {
               <TextInput label="password" type="password" value={password} onValue={handleState(setPassword)}/>
               <TextInput label="confirmPassword" type="password" value={confirmPassword} onValue={handleState(setConfirmPassword)}/>
             </div>
-            <button type='submit' onClick={handleSubmit} className="
+
+            {error && (
+              <p className="text-red-500 text-sm text-center mt-[4px]">{error}</p>
+            )}
+
+            <button
+              type='submit'
+              disabled={loading}
+              className="
                 bg-[#204666] rounded-xl w-2/5 self-center text-white font-bold text-lg pt-[5px] pb-[5px] m-[30px]
+                disabled:opacity-50
               "
             >
-              SIGN UP
+              {loading ? 'Signing up...' : 'SIGN UP'}
             </button>
           </form>
         </div>
