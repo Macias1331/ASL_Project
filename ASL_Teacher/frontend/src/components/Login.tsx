@@ -4,9 +4,6 @@ import signQuestLogo from "../assets/signQuestWhite.png";
 import TextInput from "./mini/TextInput";
 import accountIcon from "../assets/account.svg";
 import lockIcon from "../assets/lock.svg";
-import twitter from "../assets/twitter-original.svg";
-import google from "../assets/google-original.svg";
-import facebook from "../assets/facebook-original.svg";
 import { useAuth } from "./authContext";
 
 function Login() {
@@ -92,18 +89,6 @@ function Login() {
             >
               LOGIN
             </button>
-            <p className="text-center">Or Log In Using</p>
-            <div className="flex justify-center mt-[10px] gap-[10px]">
-              <button className="w-[50px] bg-[#204666] p-[10px] rounded-full ">
-                <img className="invert" src={twitter} alt='twitter'/>
-              </button>
-              <button className="w-[50px] bg-[#204666] p-[10px] rounded-full ">
-                <img src={google} alt='twitter'/>
-              </button>
-              <button className="w-[50px] bg-[#204666] p-[10px] rounded-full ">
-                <img src={facebook} alt='twitter'/>
-              </button>
-            </div>
             <button type='button' onClick={handleSignup} className="
                 bg-[#F6D052] rounded-xl w-2/5 self-center font-bold text-lg pt-[5px] pb-[5px] m-[75px]
               "

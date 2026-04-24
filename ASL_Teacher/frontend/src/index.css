@@ -4,7 +4,14 @@
   :root {
     --header-size: 75px;
     --screen-vertical-padding: 20px;
+    --bg-from: #1C3F5C;
+    --bg-to: #081520;
   }
+}
+
+html.dark {
+  --bg-from: #2d2d2d;
+  --bg-to: #121212;
 }
 
 * {
@@ -19,3 +26,4 @@ body, html {
 #root {
   height: 100%;
 }
+
