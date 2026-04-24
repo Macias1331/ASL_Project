@@ -7,11 +7,14 @@ import lockIcon from "../assets/lock.svg";
 import twitter from "../assets/twitter-original.svg";
 import google from "../assets/google-original.svg";
 import facebook from "../assets/facebook-original.svg";
+import { useAuth } from "./authContext";
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   function handleUsername(event : React.ChangeEvent<HTMLInputElement>) {
     setUsername(event.target.value);
@@ -21,9 +24,26 @@ function Login() {
     setPassword(event.target.value);
   }
 
-  function handleSubmit() {
-    navigate('/menu');
-  } 
+  async function handleSubmit(e: React.MouseEvent) {
+    e.preventDefault();
+    setError('');
+    try {
+      const res = await fetch('http://localhost:8001/api/v1/auth/login-json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) {
+        setError('Invalid username or password');
+        return;
+      }
+      const data = await res.json();
+      login(data.access_token, username);
+      navigate('/menu');
+    } catch {
+      setError('Could not connect to server');
+    }
+  }
 
   // !!! Need backend !!!
   // function handleTwitter() {
@@ -65,6 +85,7 @@ function Login() {
             <TextInput label="username" type="text" value={username} onValue={handleUsername} symbol={accountIcon} />
             <TextInput label="password" type="password" value={password} onValue={handlePassword} symbol={lockIcon} />
             <a className="text-end">Forgot password?</a>
+            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
             <button type='submit' onClick={handleSubmit} className="
                 bg-[#204666] rounded-xl w-2/5 self-center text-white font-bold text-lg pt-[5px] pb-[5px] m-[30px]
               "

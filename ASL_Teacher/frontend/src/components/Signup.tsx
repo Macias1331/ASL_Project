@@ -11,6 +11,7 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
   function handleState<T extends string>(setter : React.Dispatch<React.SetStateAction<T>>) {
     return (event : React.ChangeEvent<HTMLInputElement>) => {
@@ -18,8 +19,33 @@ function Signup() {
     }
   }
 
-  function handleSubmit() {
-    navigate('/');
+  async function handleSubmit(e: React.MouseEvent) {
+    e.preventDefault();
+    setError('');
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    try {
+      const res = await fetch('http://localhost:8001/api/v1/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        const detail = data.detail;
+        if (Array.isArray(detail)) {
+          setError(detail[0]?.msg || 'Invalid input');
+        } else {
+          setError(detail || 'Signup failed');
+        }
+        return;
+      }
+      navigate('/');
+    } catch {
+      setError('Could not connect to server');
+    }
   }
 
   return (
@@ -53,6 +79,7 @@ function Signup() {
               <TextInput label="password" type="password" value={password} onValue={handleState(setPassword)}/>
               <TextInput label="confirmPassword" type="password" value={confirmPassword} onValue={handleState(setConfirmPassword)}/>
             </div>
+            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
             <button type='submit' onClick={handleSubmit} className="
                 bg-[#204666] rounded-xl w-2/5 self-center text-white font-bold text-lg pt-[5px] pb-[5px] m-[30px]
               "
