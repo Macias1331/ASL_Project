@@ -189,15 +189,19 @@ export default function AlphabetPractice() {
             />
 
             <div className={`status-card ${isSuccessFlash ? 'status-card-success' : ''}`}>
-              <span className="label">Target Sign</span>
-              <div className="target-letter">{targetSign}</div>
+              <div className="status-section">
+                <span className="label">Target Sign</span>
+                <div className="target-letter">{targetSign}</div>
+              </div>
 
-              <div className="detected-section">
+              <div className="status-section">
                 <span className="label">Detected</span>
                 <div className="detected-letter">{prediction !== 'NONE' ? prediction : '---'}</div>
                 <p className="confidence-text">Confidence: {(confidence * 100).toFixed(0)}%</p>
-                <p className="attempt-text">Attempts on this sign: {failedAttempts}</p>
+                <p className="attempt-text">Attempts: {failedAttempts}</p>
+              </div>
 
+              <div className="status-section">
                 <div className="alternatives-block">
                   <span className="label">Top Alternatives</span>
                   {alternatives.length > 0 ? (
@@ -213,8 +217,10 @@ export default function AlphabetPractice() {
                     <p className="muted">Sign once to see alternatives.</p>
                   )}
                 </div>
+              </div>
 
-                <div className="ai-coach">
+              <div className="status-section">
+                <div className="ai-coach" style={{ width: '100%' }}>
                   <div className="coach-header">
                     <span className="label">AI Coach</span>
                     <button className="coach-button" onClick={requestAiFeedback} disabled={isFeedbackLoading}>
@@ -227,34 +233,29 @@ export default function AlphabetPractice() {
                 </div>
               </div>
 
-              <div className="nav-controls">
-                <button className="nav-button" onClick={handleBack}>
-                  Back
-                </button>
-                <button className="nav-button" onClick={handleNext}>
-                  Skip
-                </button>
+              <div className="status-section">
+                <div className="nav-controls" style={{ flexDirection: 'column' }}>
+                  <button className="nav-button" onClick={handleBack}>Back</button>
+                  <button className="nav-button" onClick={handleNext}>Skip</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex-1 flex justify-end items-end">
-        <div className="relative w-[420px] h-[420px]">
-          <div className="sombra">
+      <div className="absolute right-6 bottom-6 w-[190px] h-[280px] hidden xl:block">
+        <div className="sombra">
+          <img
+            src={selectedCharacter.image}
+            alt={selectedCharacter.name}
+            className="w-full h-full object-contain"
+          />
+          {selectedHat && (
             <img
-              src={selectedCharacter.image}
-              alt={selectedCharacter.name}
-              className="w-full h-full object-contain"
+              src={selectedHat.image}
+              alt={selectedHat.name}
+              className={selectedCharacter.hatStyle}
             />
-
-            {selectedHat && (
-              <img
-                src={selectedHat.image}
-                alt={selectedHat.name}
-                className={selectedCharacter.hatStyle}
-              />
-            )}
-          </div>
+          )}
         </div>
       </div>
       </div>
