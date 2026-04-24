@@ -40,7 +40,7 @@ function Store() {
   return (
     <>
       <Header />
-      <Body tailwind="flex flex-col gap-[40px] p-8">
+      <Body tailwind="flex flex-col gap-[12px] p-4 overflow-hidden">
         {/* Header Tabs */}
         <div className="flex gap-[20px]">
           <div className="bg-[#FFEFB8] h-[50px] flex-1 flex justify-between items-center rounded-2xl px-8 shadow-sm border border-yellow-200">
@@ -54,7 +54,7 @@ function Store() {
         </div>
 
         {/* Store Grid */}
-        <div className="grid grid-rows-2 grid-cols-4 flex-1 gap-[24px]">
+        <div className="grid grid-rows-2 grid-cols-4 flex-1 gap-[12px] min-h-0">
           
           {/* These are the two inaccessible containers under Featured Items */}
           <InaccessibleBox />
@@ -112,7 +112,7 @@ function Store() {
             <img
               src={chub}
               alt="chub"
-              className="max-h-[400px] object-contain"
+              className="max-h-full object-contain"
             />
 
             <div className="absolute bottom-3 left-3 bg-black/70 rounded-full p-2">
@@ -133,7 +133,7 @@ function Store() {
         </div>
 
         {/* Footer Navigation */}
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex justify-between items-center">
           <Button 
             imageOne={arrowLeft} 
             altOne="back"

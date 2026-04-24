@@ -4,15 +4,17 @@ import star from "../assets/star.png";
 import Body from "./mini/Body";
 import { useNavigate } from "react-router-dom";
 import { useCharacter } from "./characterContext";
+import { useAuth } from "./authContext";
 
 function MenuScreen() {
   const navigate = useNavigate();
   const { selectedCharacter, selectedHat } = useCharacter();
+  const { username } = useAuth();
 
   return (
     <>
       <Header />
-      <Body tailwind="flex gap-[20px]">
+      <Body tailwind="flex gap-[20px] overflow-hidden">
         <div className="flex-1 flex flex-col gap-[30px]">
           <button className={
                               `bg-gradient-to-r from-[#FFF0F0] to-[#2B2727] flex-1 flex items-end p-[20px] text-3xl
@@ -94,23 +96,20 @@ function MenuScreen() {
           </div>
 
           {/*character*/}
-          <div className="flex-1 flex justify-end pr-[200px] pb-[200px]">
-            <div className="flex-1 flex justify-end items-end">
-              <div className="relative w-[600px] h-[600px]">
+          <div className="flex-1 flex justify-center items-center min-h-0">
+            <div className="relative w-[280px] h-[280px]">
+              <img
+                src={selectedCharacter.image}
+                alt={selectedCharacter.name}
+                className="w-full h-full object-contain"
+              />
+              {selectedHat && (
                 <img
-                  src={selectedCharacter.image}
-                  alt={selectedCharacter.name}
-                  className="w-full h-full object-contain"
+                  src={selectedHat.image}
+                  alt={selectedHat.name}
+                  className={selectedCharacter.hatStyle}
                 />
-
-                {selectedHat && (
-                  <img
-                    src={selectedHat.image}
-                    alt={selectedHat.name}
-                    className={selectedCharacter.hatStyle}
-                  />
-                )}
-              </div>
+              )}
             </div>
           </div>
 
@@ -130,7 +129,7 @@ function MenuScreen() {
                 <div className="bg-gradient-to-b from-[#B29538] to-[#4C4018] row-span-full rounded-xl">
                   <img src={star} alt='star' />
                 </div>
-                <p className="text-3xl font-bold">HacksNoAim</p>
+                <p className="text-3xl font-bold">{username}</p>
                 <div className="flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-10 fill-[#EBEF0A]">
                     <title>star-box-outline</title>

@@ -28,6 +28,8 @@
   flex-direction: column;
   align-items: center;
   width: min(100%, 980px);
+  height: 100%;
+  overflow: hidden;
 }
 
 .progress-section {
@@ -68,15 +70,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .webcam-view {
   width: 100%;
-  max-width: 560px;
+  max-width: 420px;
+  max-height: 45vh;
+  object-fit: cover;
   border-radius: 18px;
   border: 6px solid var(--accent);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+  flex-shrink: 1;
 }
 
 .status-card {

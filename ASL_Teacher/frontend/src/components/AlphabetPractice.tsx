@@ -242,8 +242,8 @@ export default function AlphabetPractice() {
             </div>
           </div>
         </div>
-      <div className="absolute right-6 bottom-6 w-[190px] h-[280px] hidden xl:block">
-        <div className="sombra">
+      <div className="absolute right-6 bottom-6 w-[190px] h-[280px] hidden xl:block" style={{ position: 'absolute', border: '2px solid rgba(255,255,255,0.2)', borderRadius: '12px', overflow: 'visible' }}>
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <img
             src={selectedCharacter.image}
             alt={selectedCharacter.name}
