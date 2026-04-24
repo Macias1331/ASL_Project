@@ -17,4 +17,5 @@ mediapipe
 tensorflow
 joblib
 scikit-learn
+numpy<2
 pandas
